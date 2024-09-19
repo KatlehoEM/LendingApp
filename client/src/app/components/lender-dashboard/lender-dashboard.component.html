@@ -1,0 +1,39 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Lender Dashboard</h2>
+  
+    <!-- Create Loan Offer Button -->
+    <div class="d-flex justify-content-end mb-4">
+      <button class="btn btn-success" (click)="createLoanOffer()">Create Loan Offer</button>
+    </div>
+  
+    <!-- My Loan Offers Table -->
+    <h3 class="mb-4">My Loan Offers</h3>
+    <div *ngIf="loanOffers.length > 0; else noOffers" class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Amount</th>
+            <th scope="col">Interest Rate (%)</th>
+            <th scope="col">Duraton (Months)</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let offer of loanOffers">
+            <td>{{ offer.principalAmount | currency }}</td>
+            <td>{{ offer.interestRate }}%</td>
+            <td>{{ offer.durationInMonths}}</td>
+            <td>
+              <button class="btn btn-outline-primary btn-sm" (click)="viewApplications(offer.id)">View Applications</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noOffers>
+      <div class="alert alert-info" role="alert">
+        You currently have no loan offers. Click the "Create Loan Offer" button above to create your first offer.
+      </div>
+    </ng-template>
+  </div>
+  

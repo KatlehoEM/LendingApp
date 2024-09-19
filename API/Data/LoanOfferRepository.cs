@@ -23,6 +23,7 @@ public class LoanOfferRepository : ILoanOfferRepository
             PrincipalAmount = loanOfferDto.PrincipalAmount,
             DurationInMonths = loanOfferDto.DurationInMonths,
             InterestRate = loanOfferDto.InterestRate,
+            IsActive = loanOfferDto.IsActive
         };
 
         await _context.LoanOffers.AddAsync(loanOffer);

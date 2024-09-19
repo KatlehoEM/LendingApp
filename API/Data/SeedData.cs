@@ -113,197 +113,177 @@ public static class SeedData
 
             
 
-            if (!context.LoanOffers.Any())
-            {
-                // Seed LoanOffers
-               context.LoanOffers.AddRange(
-               new LoanOffer
-                {
-                    Id = 1,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    Lender = context.Users.Single(u => u.FirstName == "Jane"),
-                    PrincipalAmount = 10000.00m,
-                    InterestRate = 5.5m,
-                    DurationInMonths = 12,
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                },
-                new LoanOffer
-                {
-                    Id = 2,
-                    LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
-                    Lender = context.Users.Single(u => u.FirstName == "Thabo"),
-                    PrincipalAmount = 15000.00m,
-                    InterestRate = 6.0m,
-                    DurationInMonths = 24,
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                },
-                new LoanOffer
-                {
-                    Id = 3,
-                    LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
-                    Lender = context.Users.Single(u => u.FirstName == "Thabo"),
-                    PrincipalAmount = 5000.00m,
-                    InterestRate = 4.0m,
-                    DurationInMonths = 6,
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                },
-                new LoanOffer
-                {
-                    Id = 4,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    Lender = context.Users.Single(u => u.FirstName == "Jane"),
-                    PrincipalAmount = 25000.00m,
-                    InterestRate = 7.0m,
-                    DurationInMonths = 36,
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                },
-                new LoanOffer
-                {
-                    Id = 5,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    Lender = context.Users.Single(u => u.FirstName == "Jane"),
-                    PrincipalAmount = 2000.00m,
-                    InterestRate = 3.5m,
-                    DurationInMonths = 3,
-                    IsActive = false, // This one is no longer active
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                }
-                    );
-                context.SaveChanges();
-            }
+            // if (!context.LoanOffers.Any())
+            // {
+            //     // Seed LoanOffers
+            //    context.LoanOffers.AddRange(
+            //    new LoanOffer
+            //     {
+            //         Id = 1,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
+            //         Lender = context.Users.Single(u => u.FirstName == "Jane"),
+            //         PrincipalAmount = 10000.00m,
+            //         InterestRate = 5.5m,
+            //         DurationInMonths = 12,
+            //         IsActive = true,
+            //         CreatedAt = DateTime.UtcNow,
+            //         UpdatedAt = DateTime.UtcNow
+            //     },
+            //     new LoanOffer
+            //     {
+            //         Id = 2,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
+            //         Lender = context.Users.Single(u => u.FirstName == "Thabo"),
+            //         PrincipalAmount = 15000.00m,
+            //         InterestRate = 6.0m,
+            //         DurationInMonths = 24,
+            //         IsActive = true,
+            //         CreatedAt = DateTime.UtcNow,
+            //         UpdatedAt = DateTime.UtcNow
+            //     },
+            //     new LoanOffer
+            //     {
+            //         Id = 3,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
+            //         Lender = context.Users.Single(u => u.FirstName == "Thabo"),
+            //         PrincipalAmount = 5000.00m,
+            //         InterestRate = 4.0m,
+            //         DurationInMonths = 6,
+            //         IsActive = true,
+            //         CreatedAt = DateTime.UtcNow,
+            //         UpdatedAt = DateTime.UtcNow
+            //     },
+            //     new LoanOffer
+            //     {
+            //         Id = 4,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
+            //         Lender = context.Users.Single(u => u.FirstName == "Jane"),
+            //         PrincipalAmount = 25000.00m,
+            //         InterestRate = 7.0m,
+            //         DurationInMonths = 36,
+            //         IsActive = true,
+            //         CreatedAt = DateTime.UtcNow,
+            //         UpdatedAt = DateTime.UtcNow
+            //     },
+            //     new LoanOffer
+            //     {
+            //         Id = 5,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
+            //         Lender = context.Users.Single(u => u.FirstName == "Jane"),
+            //         PrincipalAmount = 2000.00m,
+            //         InterestRate = 3.5m,
+            //         DurationInMonths = 3,
+            //         IsActive = false, // This one is no longer active
+            //         CreatedAt = DateTime.UtcNow,
+            //         UpdatedAt = DateTime.UtcNow
+            //     }
+            //         );
+            //     context.SaveChanges();
+            // }
 
-            if (!context.LoanApplications.Any())
-            {
-                // Seed LoanApplications
-                context.LoanApplications.AddRange(
-                new LoanApplication
-            {
-                Id = 1,
-                LoanOfferId = 1,
-                BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
-                Status = LoanApplicationStatus.Pending,
-                CreatedAt = DateTime.UtcNow.AddDays(-5),
-                UpdatedAt = DateTime.UtcNow.AddDays(-5)
-            },
-            new LoanApplication
-            {
-                Id = 2,
-                LoanOfferId = 2,
-                BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
-                Status = LoanApplicationStatus.Approved,
-                CreatedAt = DateTime.UtcNow.AddDays(-10),
-                UpdatedAt = DateTime.UtcNow.AddDays(-8)
-            },
-            new LoanApplication
-            {
-                Id = 3,
-                LoanOfferId = 3,
-                BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
-                Status = LoanApplicationStatus.Rejected,
-                CreatedAt = DateTime.UtcNow.AddDays(-15),
-                UpdatedAt = DateTime.UtcNow.AddDays(-14)
-            },
-            new LoanApplication
-            {
-                Id = 4,
-                LoanOfferId = 4,
-                BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
-                Status = LoanApplicationStatus.Withdrawn,
-                CreatedAt = DateTime.UtcNow.AddDays(-20),
-                UpdatedAt = DateTime.UtcNow.AddDays(-19)
-            },
-            new LoanApplication
-            {
-                Id = 5,
-                LoanOfferId = 5,
-                BorrowerId = context.Users.Single(u => u.FirstName == "John").Id,
-                Status = LoanApplicationStatus.Pending,
-                CreatedAt = DateTime.UtcNow.AddDays(-2),
-                UpdatedAt = DateTime.UtcNow.AddDays(-2)
-            }
+            // if (!context.LoanApplications.Any())
+            // {
+            //     // Seed LoanApplications
+            //     context.LoanApplications.AddRange(
+            //     new LoanApplication
+            // {
+            //     Id = 1,
+            //     LoanOfferId = 1,
+            //     BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
+            //     Status = LoanApplicationStatus.Pending,
+            //     CreatedAt = DateTime.UtcNow.AddDays(-5),
+            //     UpdatedAt = DateTime.UtcNow.AddDays(-5)
+            // },
+            // new LoanApplication
+            // {
+            //     Id = 2,
+            //     LoanOfferId = 2,
+            //     BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
+            //     Status = LoanApplicationStatus.Approved,
+            //     CreatedAt = DateTime.UtcNow.AddDays(-10),
+            //     UpdatedAt = DateTime.UtcNow.AddDays(-8)
+            // },
+            // new LoanApplication
+            // {
+            //     Id = 3,
+            //     LoanOfferId = 3,
+            //     BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
+            //     Status = LoanApplicationStatus.Rejected,
+            //     CreatedAt = DateTime.UtcNow.AddDays(-15),
+            //     UpdatedAt = DateTime.UtcNow.AddDays(-14)
+            // },
+            // new LoanApplication
+            // {
+            //     Id = 4,
+            //     LoanOfferId = 4,
+            //     BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
+            //     Status = LoanApplicationStatus.Withdrawn,
+            //     CreatedAt = DateTime.UtcNow.AddDays(-20),
+            //     UpdatedAt = DateTime.UtcNow.AddDays(-19)
+            // },
+            // new LoanApplication
+            // {
+            //     Id = 5,
+            //     LoanOfferId = 5,
+            //     BorrowerId = context.Users.Single(u => u.FirstName == "John").Id,
+            //     Status = LoanApplicationStatus.Pending,
+            //     CreatedAt = DateTime.UtcNow.AddDays(-2),
+            //     UpdatedAt = DateTime.UtcNow.AddDays(-2)
+            // }
                     
-                );
-                context.SaveChanges();
-            }
+            //     );
+            //     context.SaveChanges();
+            // }
 
 
-            if (!context.Ratings.Any())
-            {
-                // Seed Ratings
-                context.Ratings.AddRange(
-                new Rating
-                {
-                    Id = 1,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
-                    LoanApplicationId = 1,
-                    Score = 5,
-                    CreatedAt = DateTime.UtcNow.AddDays(-30),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-30)
-                },
-                new Rating
-                {
-                    Id = 2,
-                    LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
-                    BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
-                    LoanApplicationId = 2,
-                    Score = 4,
-                    CreatedAt = DateTime.UtcNow.AddDays(-25),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-25)
-                },
-                new Rating
-                {
-                    Id = 3,
-                    LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
-                    BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
-                    LoanApplicationId = 3,
-                    Score = 2,
-                    CreatedAt = DateTime.UtcNow.AddDays(-20),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-20)
-                },
-                new Rating
-                {
-                    Id = 4,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
-                    LoanApplicationId = 4,
-                    Score = 3,
-                    CreatedAt = DateTime.UtcNow.AddDays(-15),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-15)
-                },
-                new Rating
-                {
-                    Id = 5,
-                    LenderId = 205,
-                    BorrowerId = 105,
-                    LoanApplicationId = 5,
-                    Score = 5,
-                    CreatedAt = DateTime.UtcNow.AddDays(-10),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-10)
-                },
-                new Rating
-                {
-                    Id = 6,
-                    LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
-                    BorrowerId = context.Users.Single(u => u.FirstName == "John").Id,
-                    LoanApplicationId = 6,
-                    Score = 1,
-                    CreatedAt = DateTime.UtcNow.AddDays(-5),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-5)
-                }
+            // if (!context.Ratings.Any())
+            // {
+            //     // Seed Ratings
+            //     context.Ratings.AddRange(
+            //     new Rating
+            //     {
+            //         Id = 1,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
+            //         BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
+            //         LoanApplicationId = 1,
+            //         Score = 5,
+            //         CreatedAt = DateTime.UtcNow.AddDays(-30),
+            //         UpdatedAt = DateTime.UtcNow.AddDays(-30)
+            //     },
+            //     new Rating
+            //     {
+            //         Id = 2,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
+            //         BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
+            //         LoanApplicationId = 2,
+            //         Score = 4,
+            //         CreatedAt = DateTime.UtcNow.AddDays(-25),
+            //         UpdatedAt = DateTime.UtcNow.AddDays(-25)
+            //     },
+            //     new Rating
+            //     {
+            //         Id = 3,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Thabo").Id,
+            //         BorrowerId = context.Users.Single(u => u.FirstName == "Lerato").Id,
+            //         LoanApplicationId = 3,
+            //         Score = 2,
+            //         CreatedAt = DateTime.UtcNow.AddDays(-20),
+            //         UpdatedAt = DateTime.UtcNow.AddDays(-20)
+            //     },
+            //     new Rating
+            //     {
+            //         Id = 4,
+            //         LenderId = context.Users.Single(u => u.FirstName == "Jane").Id,
+            //         BorrowerId = context.Users.Single(u => u.FirstName == "Alice").Id,
+            //         LoanApplicationId = 4,
+            //         Score = 3,
+            //         CreatedAt = DateTime.UtcNow.AddDays(-15),
+            //         UpdatedAt = DateTime.UtcNow.AddDays(-15)
+            //      }
                     
-                );
-                context.SaveChanges();
-            }
+            //     );
+            //     context.SaveChanges();
+            // }
 
         }
     }

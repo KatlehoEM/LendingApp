@@ -1,0 +1,83 @@
+/* Main container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 100vh;
+    background-color: #f5f5f5;
+    padding: 80px;
+}
+
+h2 {
+    text-align: center;
+    color: #333333;
+    font-size: 1.8em;
+    margin-bottom: 30px;
+  }
+
+/* Login card */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Button styles */
+.btn {
+    padding: 10px;
+    background-color: #28a745; /* Bootstrap green */
+    color: white;
+    border: none;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+
+/* Create account link */
+.create-account {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.create-account p {
+    font-size: 0.9em;
+}
+
+.create-account a {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.create-account a:hover {
+    text-decoration: underline;
+}
+
+input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  label {
+    font-size: 0.9em;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+  }

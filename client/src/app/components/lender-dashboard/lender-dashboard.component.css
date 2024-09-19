@@ -1,0 +1,13 @@
+.container {
+    max-width: 900px;
+    margin-top: 20px;
+  }
+  
+.table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .btn-outline-primary {
+    margin-left: 10px;
+  }
+  

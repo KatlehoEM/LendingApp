@@ -1,0 +1,27 @@
+.main-content {
+    margin-left: 50px;
+    padding: 20px;
+  }
+
+  .custom-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-btn:hover {
+    background-color: #218838;
+  }
+  
+  .custom-btn:focus {
+    outline: none;
+  }
+  
+  .custom-btn:active {
+    background-color: #1e7e34;
+  }

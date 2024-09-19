@@ -1,0 +1,55 @@
+<div class="sidebar-container" [class.open]="isOpen">
+  <button class="toggle-btn" (click)="toggleSidebar()">
+    ☰
+  </button>
+  <div class="sidebar-content">
+    <div class="brand">
+      <a class="navbar-brand logo" routerLink="/">
+         P2P Lending App
+      </a>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-house"></i> Home
+          </a>
+        </li>
+        <ng-container *ngIf="authService.isLoggedIn()">
+          <li *ngIf="authService.isLender()">
+            <a routerLink="/lender-dashboard" routerLinkActive="active">
+              <i class="bi bi-bank"></i> Lender Dashboard
+            </a>
+          </li>
+          <li *ngIf="authService.isBorrower()">
+            <a routerLink="/borrower-dashboard" routerLinkActive="active">
+              <i class="bi bi-person"></i> Borrower Dashboard
+            </a>
+          </li>
+          <li>
+            <a routerLink="/loan-offers" routerLinkActive="active">
+              <i class="bi bi-cash"></i> Loan Offers
+            </a>
+          </li>
+          <li>
+            <a (click)="logout()" routerLink="/home">
+              <i class="bi bi-box-arrow-right"></i> Log Out
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="!authService.isLoggedIn()">
+          <li>
+            <a routerLink="/login" routerLinkActive="active">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+          </li>
+          <li>
+            <a routerLink="/register" routerLinkActive="active">
+              <i class="bi bi-person-plus"></i> Register
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </nav>
+  </div>
+</div>

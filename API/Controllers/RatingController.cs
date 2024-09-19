@@ -1,9 +1,11 @@
+using System.Security.Claims;
+using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -11,17 +13,21 @@ namespace API.Controllers
     public class RatingController : BaseApiController
     {
         private readonly IRatingRepository _ratingRepo;
+        private readonly DataContext _context;
 
-        public RatingController(IRatingRepository ratingRepository)
+        public RatingController(IRatingRepository ratingRepository, DataContext context)
         {
             _ratingRepo = ratingRepository;
+            _context = context;
         }
 
         [HttpPost]
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> CreateBorrowerRating(CreateRatingDto createRatingDto)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             try
             {
                 var borrowerRating = await _ratingRepo.CreateBorrowerRatingAsync(lenderId, createRatingDto);
@@ -62,7 +68,9 @@ namespace API.Controllers
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> UpdateBorrowerRating(int id, UpdateRatingDto updateRatingDto)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             try
             {
                 var updatedBorrowerRating = await _ratingRepo.UpdateBorrowerRatingAsync(id, lenderId, updateRatingDto);

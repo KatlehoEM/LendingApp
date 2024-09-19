@@ -1,0 +1,86 @@
+/* Main container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+/* Hero image */
+.hero-image img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Main title */
+.main-title {
+    font-size: 2.5rem;
+    color: #28a745; /* Bootstrap's green color */
+    margin-bottom: 10px;
+}
+
+/* Introduction text */
+.intro-text {
+    font-size: 1.2rem;
+    color: #343a40; /* Bootstrap's gray-dark color */
+    margin-bottom: 20px;
+}
+
+/* Welcome card */
+.welcome-card {
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border: none; /* Remove card border for a cleaner look */
+    border-radius: 10px; /* Slight rounding for modern look */
+}
+
+.card-header {
+    background-color: #28a745;
+}
+
+/* Card title */
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff; /* Bootstrap's gray-dark */
+}
+
+/* Steps list */
+.steps-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* List items */
+.steps-list li {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6; /* Light gray Bootstrap color for border */
+    display: flex;
+    align-items: center;
+    color: #28a745; /* Bootstrap's green color */
+}
+
+/* Remove last border */
+.steps-list li:last-child {
+    border-bottom: none;
+}
+
+/* Icon styling */
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+
+  
+

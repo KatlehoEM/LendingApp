@@ -15,8 +15,8 @@ public class UserService : IUserService
         _jwtService = jwtService;
     }
 
-    public async Task<User> RegisterUserAsync(string firstName, string lastName, string email, string password,string confirmPassword, int creditScore,
-     Role role, string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome)
+    public async Task<User> RegisterUserAsync(string firstName, string lastName, string email, Role role, string password,string confirmPassword, DateTime dateOfBirth,
+      string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore)
     {
          // Add validation logic here (e.g., password strength, email format, credit score range)
         if (creditScore < 300 || creditScore > 850)
@@ -24,8 +24,8 @@ public class UserService : IUserService
             throw new ArgumentException("Credit score must be between 300 and 850.");
         }
 
-        return await _userRepository.CreateUserAsync(firstName, lastName, email, password, confirmPassword, creditScore,
-     role, null,  idNumber, address, phoneNumber, employmentStatus, annualIncome);
+        return await _userRepository.CreateUserAsync(firstName, lastName, email, role, password, confirmPassword, dateOfBirth,
+      idNumber, address, phoneNumber, employmentStatus,  annualIncome,creditScore, "");
     
     }
 

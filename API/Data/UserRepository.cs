@@ -15,8 +15,8 @@ public class UserRepository : IUserRepository
         _context = context;
    }
 
-    public async Task<User> CreateUserAsync(string firstName, string lastName, string email, string password,string confirmPassword, int creditScore,
-     Role role, string walletAddress, string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome)
+    public async Task<User> CreateUserAsync(string firstName, string lastName, string email, Role role, string password,string confirmPassword, DateTime dateOfBirth,
+      string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore, string walletAddress)
     {
         var user = new User
         {

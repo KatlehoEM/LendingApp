@@ -18,4 +18,5 @@ public class RegisterDto
     public string PhoneNumber { get; set; }
     public string EmploymentStatus { get; set; }
     public decimal AnnualIncome { get; set; }
+    public bool termsAndConditions {get;set;}
 }

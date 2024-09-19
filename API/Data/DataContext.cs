@@ -13,6 +13,9 @@ namespace API.Data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<LoanApplication> LoanApplications { get; set; }
         public DbSet<LoanOffer> LoanOffers { get; set; }
+
+        public DbSet<Loan> Loans{ get; set; }
+        public DbSet<Payment> Payments{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // User configuration
@@ -57,6 +60,12 @@ namespace API.Data
                 .HasOne(br => br.LoanApplication)
                 .WithMany()
                 .HasForeignKey(br => br.LoanApplicationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Loan>()
+                .HasMany(l => l.Payments)
+                .WithOne(p => p.Loan)
+                .HasForeignKey(p => p.LoanId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

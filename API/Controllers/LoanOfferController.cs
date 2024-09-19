@@ -1,9 +1,11 @@
+using System.Security.Claims;
+using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -11,17 +13,20 @@ namespace API.Controllers
     public class LoanOfferController : BaseApiController
     {
         private readonly ILoanOfferRepository _loanOfferRepo;
-
-        public LoanOfferController(ILoanOfferRepository loanOfferRepo)
+        private readonly DataContext _context;
+        public LoanOfferController(ILoanOfferRepository loanOfferRepo, DataContext context)
         {
             _loanOfferRepo = loanOfferRepo;
+            _context = context;
         }
 
         [HttpPost]
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> CreateLoanOffer(LoanOfferDto loanOfferDto)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             var loanOffer = await _loanOfferRepo.CreateLoanOfferAsync(lenderId, loanOfferDto);
             return CreatedAtAction(nameof(GetLoanOffer), new { id = loanOffer.Id }, loanOffer);
         }
@@ -49,8 +54,9 @@ namespace API.Controllers
         [Authorize(Roles = "Lender")]
         public async Task<ActionResult<IEnumerable<LoanOffer>>> GetMyLoanOffers()
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
-            var loanOffers = await _loanOfferRepo.GetLoanOffersByLenderIdAsync(lenderId);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var loanOffers = await _loanOfferRepo.GetLoanOffersByLenderIdAsync(user.Id);
             return Ok(loanOffers);
         }
 
@@ -58,7 +64,9 @@ namespace API.Controllers
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> UpdateLoanOffer(int id, UpdateLoanOfferDto updateLoanOfferDto)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             try
             {
                 var updatedLoanOffer = await _loanOfferRepo.UpdateLoanOfferAsync(id, lenderId, updateLoanOfferDto);
@@ -74,7 +82,9 @@ namespace API.Controllers
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> DeleteLoanOffer(int id)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             try
             {
                 await _loanOfferRepo.DeleteLoanOfferAsync(id, lenderId);

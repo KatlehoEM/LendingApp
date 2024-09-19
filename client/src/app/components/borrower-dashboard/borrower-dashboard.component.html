@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Borrower Dashboard</h2>
+  
+    <!-- My Loan Applications Table -->
+    <h3 class="mb-4">My Loan Applications</h3>
+    <div *ngIf="loanApplications.length > 0; else noApplications" class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Principal Amount</th>
+            <th scope="col">Interest (%)</th>
+            <th scope="col">Duration (months)</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let application of loanApplications">
+            <td>{{ application.loanOffer.principalAmount| currency }}</td>
+            <td>{{application.loanOffer.interestRate}}</td>
+            <td>{{application.loanOffer.durationInMonths}}</td>
+            <td><span *ngIf="application.status === 0">Pending</span>
+              <span *ngIf="application.status === 1">Approved</span>
+              <span *ngIf="application.status === 2">Rejected</span>
+              <span *ngIf="application.status === 3" >Withdrawn</span>
+            <td>
+              <button *ngIf="application.status === 1" class="btn btn-outline-success btn-sm" (click)="openPaymentModal(application.loanOffer.id)">Make Payment</button>
+              <button *ngIf="application.status === 0" class="btn btn-outline-success btn-sm" (click)="withdrawApplication(application.id)">Withdraw</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noApplications>
+      <div class="alert alert-info" role="alert">
+        You currently have no loan applications. Would you like to <a href="/apply" class="alert-link">apply for a loan</a>?
+      </div>
+    </ng-template>
+  </div>
+  

@@ -1,0 +1,23 @@
+<app-sidebar></app-sidebar>
+    <div class="main-content">
+      <!-- Conditional Display for User Info and Logout Button -->
+      <ng-container *ngIf="user$ | async as user; else loggedOut">
+        <div class="d-flex justify-content-end mb-3 align-items-center">
+          <!-- User Profile Icon -->
+          <i class="bi bi-person-circle me-2" title="User Profile"></i>
+          <!-- User Name -->
+          <span class="me-3 text-lg">{{ user.firstname }}</span>
+          <!-- Logout Button -->
+          <button class="btn btn-outline-success" (click)="logout()">Logout</button>
+        </div>
+      </ng-container>
+
+      <!-- Template for Logged Out State -->
+      <ng-template #loggedOut>
+        <div class="d-flex justify-content-end mb-3">
+          <a routerLink="/register" class="btn custom-btn me-2">Register</a>
+          <a routerLink="/login" class="btn custom-btn">Login</a>
+        </div>
+      </ng-template>
+      <router-outlet></router-outlet>
+    </div>

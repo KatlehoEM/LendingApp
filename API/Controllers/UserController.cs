@@ -25,28 +25,34 @@ public class UserController : BaseApiController
                 registerDto.FirstName,
                 registerDto.LastName, 
                 registerDto.Email, 
+                registerDto.Role,
                 registerDto.Password,
                 registerDto.ConfirmPassword,
-                registerDto.CreditScore, 
-                registerDto.Role,
+                registerDto.DateOfBirth,
                 registerDto.IdNumber,
                 registerDto.Address,
                 registerDto.PhoneNumber,
                 registerDto.EmploymentStatus,
-                registerDto.AnnualIncome
+                registerDto.AnnualIncome,
+                registerDto.CreditScore
             );
-            var wallet = await _blockchainService.CreateWalletAsync(user.Id);
-            user.WalletAddress = wallet.Address;
+            // var wallet = await _blockchainService.CreateWalletAsync(user.Id);
+            // user.WalletAddress = wallet.Address;
 
-            await _userService.UpdateUserAsync(user);
+            // await _userService.UpdateUserAsync(user);
             
-
-            return Ok(new { message = "User registered successfully", userId = user.Id, walletAddress = user.WalletAddress });
-       }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = "Registration failed", error = ex.Message });
+            var (isValid, token, role) = await _userService.LoginAsync(registerDto.FirstName, registerDto.Password);
+            if (isValid)
+            {
+                return Ok(new { firstname = registerDto.FirstName, token = token, role = role });
+            }
+            return Unauthorized(new { message = "Invalid username or password" });
+                
         }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Registration failed", error = ex.Message });
+            }
     }
 
     [HttpPost("login")]
@@ -55,7 +61,7 @@ public class UserController : BaseApiController
         var (isValid, token, role) = await _userService.LoginAsync(loginDto.FirstName, loginDto.Password);
         if (isValid)
         {
-            return Ok(new { user = loginDto.FirstName, token = token, role = role });
+            return Ok(new { firstname = loginDto.FirstName, token = token, role = role });
         }
         return Unauthorized(new { message = "Invalid username or password" });
     }

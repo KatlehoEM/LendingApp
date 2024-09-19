@@ -1,0 +1,5 @@
+/* You can add global styles to this file, and also import other style files */
+.toast-success {
+  background-color: #28a745 !important; /* Green background */
+  color: #fff !important; /* White text */
+}

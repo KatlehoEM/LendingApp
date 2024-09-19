@@ -1,0 +1,43 @@
+<div class="container mt-5">
+    <h3 class="mb-4">Loan Applications for Offer ID: {{ loanOfferId }}</h3>
+  
+    <div *ngIf="loanApplications.length > 0; else noApplications" class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Applicant Name</th>
+            <th>Credit Score</th>
+            <th scope="col">Status</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let application of loanApplications">
+            <td>{{ application.borrower.firstName }}</td>
+            <td>{{ application.borrower.creditScore}}</td>
+            <td><span *ngIf="application.status === loanApplicationStatus.Pending">Pending</span>
+              <span *ngIf="application.status === loanApplicationStatus.Approved">Approved</span>
+              <span *ngIf="application.status === loanApplicationStatus.Rejected">Rejected</span>
+            </td>
+            <td>
+              <app-star-rating *ngIf="application.status === loanApplicationStatus.Approved"
+                               [(rating)]="userRating"
+                               (ratingChange)="onRatingChange(application.id, $event)">
+              </app-star-rating>
+            </td>
+            <td>
+              <button *ngIf="application.status === loanApplicationStatus.Pending" class="btn btn-success btn-sm me-2" (click)="updateStatus(application.id, loanApplicationStatus.Approved)">Approve</button>
+              <button *ngIf="application.status === loanApplicationStatus.Pending" class="btn btn-danger btn-sm" (click)="updateStatus(application.id, loanApplicationStatus.Rejected)">Reject</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noApplications>
+      <div class="alert alert-info" role="alert">
+        There are currently no applications for this loan offer.
+      </div>
+    </ng-template>
+  </div>
+  

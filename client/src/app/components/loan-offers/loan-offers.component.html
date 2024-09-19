@@ -1,0 +1,41 @@
+<!-- src/app/components/loan-offer/loan-offer.component.html -->
+<div class="loan-offer-container container mt-4">
+  <h2 class="text-center mb-4">Loan Offers</h2>
+
+  <!-- Toggle Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <button *ngIf="authService.isLender()"  class="btn btn-outline-success me-2" (click)="toggleMyOffers()">
+      {{ showMyOffersOnly ? 'Show All Offers' : 'Show My Offers Only' }}
+    </button>
+    <button *ngIf="authService.isLender()" routerLink="/create-offer" class="btn btn-success">
+        Create Offer
+    </button>  
+  </div>
+
+  <!-- Loan Offer List -->
+  <div class="loan-offer-list row">
+    <div *ngFor="let offer of loanOffers" class="loan-offer-item col-md-4 col-sm-6">
+      <div class="card shadow-sm h-30" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Principal: {{ offer.principalAmount | currency }}</h5>
+          <p class="mb-1">Interest Rate: {{ offer.interestRate }}%</p>
+          <p class="mb-1">Duration: {{ offer.durationInMonths }} months</p>
+          <p class="mb-1">Lender: {{ offer.lender.firstName }}</p>
+
+
+          <!-- Conditional Buttons: Only show 'Apply' if the user is a borrower -->
+          <div class="d-flex justify-content-between mt-3">
+            <ng-container *ngIf="authService.isBorrower()">
+              <button class="btn btn-outline-success btn-sm" (click)="applyForLoan(offer)">
+                Apply
+              </button>
+            </ng-container>
+            <button *ngIf="showMyOffersOnly" class="btn btn-outline-primary btn-sm" (click)="updateLoanOffer(offer)">Edit</button>
+            <button *ngIf="showMyOffersOnly" class="btn btn-outline-danger btn-sm" (click)="deleteLoanOffer(offer.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

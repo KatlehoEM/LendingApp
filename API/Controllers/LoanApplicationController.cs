@@ -1,9 +1,12 @@
+using System.Security.Claims;
+using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -12,17 +15,20 @@ namespace API.Controllers
     public class LoanApplicationController : BaseApiController
     {
         private readonly ILoanApplicationRepository _loanApplicationRepo;
-        
-        public LoanApplicationController(ILoanApplicationRepository loanApplicationRepository)
+         private readonly DataContext _context;
+        public LoanApplicationController(ILoanApplicationRepository loanApplicationRepository, DataContext context)
         {
             _loanApplicationRepo = loanApplicationRepository;
+            _context = context;
         }
 
          [HttpPost]
         [Authorize(Roles = "Borrower")]
         public async Task<IActionResult> CreateLoanApplication(CreateLoanApplicationDto createLoanApplicationDto)
         {
-            var borrowerId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var borrowerId = user.Id;
             try
             {
                 var loanApplication = await _loanApplicationRepo.CreateLoanApplicationAsync(borrowerId, createLoanApplicationDto);
@@ -49,7 +55,9 @@ namespace API.Controllers
         [Authorize(Roles = "Borrower")]
         public async Task<ActionResult<IEnumerable<LoanApplication>>> GetBorrowerLoanApplications()
         {
-            var borrowerId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var borrowerId = user.Id;
             var loanApplications = await _loanApplicationRepo.GetLoanApplicationsByBorrowerIdAsync(borrowerId);
             return Ok(loanApplications);
         }
@@ -66,7 +74,9 @@ namespace API.Controllers
         [Authorize(Roles = "Lender")]
         public async Task<IActionResult> UpdateLoanApplicationStatus(int id, UpdateLoanApplicationStatusDto updateLoanApplicationStatusDto)
         {
-            var lenderId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var lenderId = user.Id;
             try
             {
                 var updatedLoanApplication = await _loanApplicationRepo.UpdateLoanApplicationStatusAsync(id, lenderId, updateLoanApplicationStatusDto);
@@ -82,7 +92,9 @@ namespace API.Controllers
         [Authorize(Roles = "Borrower")]
         public async Task<IActionResult> WithdrawLoanApplication(int id)
         {
-            var borrowerId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var borrowerId = user.Id;
             try
             {
                 var result = await _loanApplicationRepo.WithdrawLoanApplicationAsync(id, borrowerId);
