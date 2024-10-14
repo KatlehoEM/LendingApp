@@ -1,7 +1,6 @@
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -33,12 +32,27 @@ namespace API.Controllers
         
         }
 
-        [HttpGet("pending/{loanOfferId}")]
+    [HttpGet("pending/{loanOfferId}")]
     public async Task<ActionResult<IEnumerable<LoanApplication>>> GetPendingApplications(int loanOfferId)
     {
         var pendingApplications = await _loanRepo.GetPendingApplicationsForLoanOfferAsync(loanOfferId);
         return Ok(pendingApplications);
     }
+
+    [HttpGet("loanoffers/{loanOfferId}/payments")]
+public async Task<ActionResult<IEnumerable<Payment>>> GetPaymentsForLoanOffer(int loanOfferId)
+{
+    try
+    {
+        var payments = await _loanRepo.GetPaymentsForLoanOfferAsync(loanOfferId);
+        return Ok(payments);
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+
 
     }
 }

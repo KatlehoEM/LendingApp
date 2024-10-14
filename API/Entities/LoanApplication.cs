@@ -14,6 +14,8 @@ public class LoanApplication
         [Required]
         public int BorrowerId { get; set; }
         public User Borrower { get; set; }
+        public decimal MonthlyRepayment {get;set;}
+        public decimal TotalRepayment {get;set;}
 
         [Required]
         public LoanApplicationStatus Status { get; set; }
@@ -22,6 +24,7 @@ public class LoanApplication
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 
       public enum LoanApplicationStatus

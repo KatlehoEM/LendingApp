@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      firstname: ['', [Validators.required]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
   }
@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
             else{
               this.router.navigateByUrl('/lender-dashboard');
             }
-            // this.loginForm.reset();
           },
           error: error => {
             console.error('Login error:', error);

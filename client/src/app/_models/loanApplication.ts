@@ -1,6 +1,7 @@
 // src/app/models/loan-application.model.ts
 
 import { LoanOffer } from "./loan-offer";
+import { Payment } from "./payment";
 
 export enum LoanApplicationStatus {
   Pending = 0,
@@ -14,13 +15,16 @@ export interface LoanApplication {
     loanOfferId: number;
     loanOffer: LoanOffer;
     borrowerId: number;
+    monthlyRepayment:number;
+    totalRepayment:number;
     borrower: Borrower;
     status: LoanApplicationStatus;
     acceptanceDate: string;
     createdAt: string;
     updatedAt: string;
+    payments: Payment[];
   }
-  interface Borrower {
+  export interface Borrower {
     id: number;
     firstName: string;
     lastName: string;

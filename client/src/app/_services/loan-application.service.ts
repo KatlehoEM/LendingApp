@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoanApplication, LoanApplicationStatus } from '../_models/loanApplication';
 import { HttpClient } from '@angular/common/http';
+import { LoanApplicationDto } from '../_models/loanApplicationDto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +16,16 @@ export class LoanApplicationService {
     return this.http.post<LoanApplication>(this.apiUrl, createLoanApplicationDto);
   }
 
-  getLoanApplication(id: number): Observable<LoanApplication> {
-    return this.http.get<LoanApplication>(`${this.apiUrl}/${id}`);
+  getLoanApplication(id: number): Observable<LoanApplicationDto> {
+    return this.http.get<LoanApplicationDto>(`${this.apiUrl}/${id}`);
   }
 
   getBorrowerLoanApplications(): Observable<LoanApplication[]> {
     return this.http.get<LoanApplication[]>(`${this.apiUrl}/borrower`);
   }
 
-  getLoanOfferApplications(loanOfferId: number): Observable<LoanApplication[]> {
-    return this.http.get<LoanApplication[]>(`${this.apiUrl}/lender/${loanOfferId}`);
+  getLoanOfferApplications(loanOfferId: number): Observable<LoanApplicationDto[]> {
+    return this.http.get<LoanApplicationDto[]>(`${this.apiUrl}/lender/${loanOfferId}`);
   }
 
   updateLoanApplicationStatus(id: number, status: LoanApplicationStatus): Observable<LoanApplication> {

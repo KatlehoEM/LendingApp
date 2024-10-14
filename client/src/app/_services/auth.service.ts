@@ -50,13 +50,7 @@ export class AuthService implements OnInit {
   }
 
   register(model: any){
-    return this.http.post<User>(this.apiUrl + '/register',model).pipe(
-      map(user => {
-        if(user) {
-          this.setCurrentUser(user);
-        }
-      })
-    )
+    return this.http.post<User>(this.apiUrl + '/register',model);
    }
 
 

@@ -41,6 +41,10 @@ public class PaymentRepository : IPaymentRepository
                     .Include(l => l.Payments)
                     .Include(l => l.LoanOffer)
                     .FirstOrDefaultAsync(l => l.LoanOfferId == request.LoanOfferId);
+                
+                var loanApplication = await _context.LoanApplications
+                    .Include(la => la.LoanOffer)
+                    .FirstOrDefaultAsync(l => l.LoanOfferId == request.LoanOfferId);
 
                 if (loan == null)
                 {
@@ -56,7 +60,9 @@ public class PaymentRepository : IPaymentRepository
                 {
                     LoanId = loan.Id,
                     Amount = request.Amount,
-                    PaymentDate = DateTime.UtcNow
+                    PaymentDate = DateTime.UtcNow,
+                    LoanApplicationId = loanApplication.Id,
+                    Balance = loan.RemainingBalance - request.Amount
                 };
 
                 _context.Payments.Add(payment);

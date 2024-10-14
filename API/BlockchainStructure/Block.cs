@@ -11,6 +11,7 @@ public class Block
     public string Hash { get; set; }
     public List<Transaction> Transactions { get; set; }
     public int Nonce { get; set; }
+    
 
     public Block(int index, DateTime timestamp, string previousHash, List<Transaction> transactions)
     {
@@ -32,13 +33,24 @@ public class Block
         return BitConverter.ToString(hashBytes).Replace("-", "");
     }
 
-    public void Mine(int difficulty)
+    public void Mine(int difficulty, ILogger<Blockchain> _logger)
     {
         string leadingZeros = new string('0', difficulty);
+        _logger.LogInformation($"\n\n----------------- Mining block {Index}  ----------------\n");
+        int attempts = 0;
         while (!Hash.StartsWith(leadingZeros))
         {
             Nonce++;
             Hash = CalculateHash();
+            attempts++;
+            
+            _logger.LogInformation($"\tMining attempt {attempts}:  Hash = {Hash}");
+            
+
+            if (attempts % 100000 == 0)
+            {
+               _logger.LogInformation($"\nMining in progress: {attempts} attempts made");
+            }
         }
     }
 }

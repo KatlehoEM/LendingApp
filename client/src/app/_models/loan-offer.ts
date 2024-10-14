@@ -6,8 +6,11 @@ export interface LoanOffer {
   lender: Lender;
   principalAmount: number; // Using number for decimal in TypeScript
   interestRate: number;
-  durationInMonths: number;
+  durationInYears: number;
+  monthlyRepayment: number;
+  totalRepayment: number;
   isActive: boolean;
+  hasApplied: boolean; 
   createdAt: Date;
   updatedAt: Date;
 }

@@ -30,23 +30,19 @@ public class UserController : BaseApiController
                 registerDto.ConfirmPassword,
                 registerDto.DateOfBirth,
                 registerDto.IdNumber,
-                registerDto.Address,
+                registerDto.StreetNumber,
+                registerDto.StreetName,
+                registerDto.City,
+                registerDto.PostalCode,
                 registerDto.PhoneNumber,
                 registerDto.EmploymentStatus,
                 registerDto.AnnualIncome,
                 registerDto.CreditScore
             );
-            // var wallet = await _blockchainService.CreateWalletAsync(user.Id);
-            // user.WalletAddress = wallet.Address;
-
-            // await _userService.UpdateUserAsync(user);
             
-            var (isValid, token, role) = await _userService.LoginAsync(registerDto.FirstName, registerDto.Password);
-            if (isValid)
-            {
-                return Ok(new { firstname = registerDto.FirstName, token = token, role = role });
-            }
-            return Unauthorized(new { message = "Invalid username or password" });
+            await _blockchainService.CreateReputationScoreAsync(user.Id);
+            
+            return Ok(user);
                 
         }
             catch (Exception ex)
@@ -58,10 +54,10 @@ public class UserController : BaseApiController
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var (isValid, token, role) = await _userService.LoginAsync(loginDto.FirstName, loginDto.Password);
+        var (isValid, token, role, firstName) = await _userService.LoginAsync(loginDto.Email, loginDto.Password);
         if (isValid)
         {
-            return Ok(new { firstname = loginDto.FirstName, token = token, role = role });
+            return Ok(new { firstname = firstName, token = token, role = role });
         }
         return Unauthorized(new { message = "Invalid username or password" });
     }

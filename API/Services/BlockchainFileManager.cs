@@ -7,9 +7,10 @@ using API.BlockchainStructure;
 public class BlockchainFileManager
 {
     private const string BlockchainFileName = "blockchain_data.json";
-       private readonly JsonSerializerOptions _jsonOptions;
+    private readonly JsonSerializerOptions _jsonOptions;
+    private readonly ILogger<Blockchain> _blockchainLogger;
 
-    public BlockchainFileManager()
+    public BlockchainFileManager(ILogger<Blockchain> blockchainLogger)
     {
          _jsonOptions = new JsonSerializerOptions
         {
@@ -17,6 +18,7 @@ public class BlockchainFileManager
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.Never
         };
+        _blockchainLogger = blockchainLogger;
     }
 
     public void SaveBlockchainData(Blockchain blockchain)
@@ -34,14 +36,14 @@ public class BlockchainFileManager
             string jsonString = File.ReadAllText(BlockchainFileName);
             var chainData = JsonSerializer.Deserialize<ChainData>(jsonString,_jsonOptions);
 
-            var blockchain = new Blockchain
+            var blockchain = new Blockchain(_blockchainLogger)
             {
                 Chain = chainData.Chain
             };
             return blockchain;
         }
 
-        return new Blockchain();
+        return new Blockchain(_blockchainLogger);
     }
 }
 

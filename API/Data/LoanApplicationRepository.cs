@@ -32,6 +32,7 @@ public class LoanApplicationRepository : ILoanApplicationRepository
         };
 
         await _context.LoanApplications.AddAsync(loanApplication);
+        loanOffer.HasApplied = true;
         await _context.SaveChangesAsync();
 
         return loanApplication;
@@ -40,25 +41,28 @@ public class LoanApplicationRepository : ILoanApplicationRepository
     public async Task<LoanApplication> GetLoanApplicationByIdAsync(int id)
     {
         return await _context.LoanApplications
-                .Include(la => la.LoanOffer)
-                .Include(la => la.Borrower)
-                .FirstOrDefaultAsync(la => la.Id == id);
+            .Include(la => la.LoanOffer)
+            .Include(la => la.Borrower)
+            .Include(la => la.Payments) // Include payments
+            .FirstOrDefaultAsync(la => la.Id == id);
     }
 
     public async Task<IEnumerable<LoanApplication>> GetLoanApplicationsByBorrowerIdAsync(int borrowerId)
     {
         return await _context.LoanApplications
-                .Where(la => la.BorrowerId == borrowerId)
-                .Include(la => la.LoanOffer)
-                .ToListAsync();
+            .Where(la => la.BorrowerId == borrowerId)
+            .Include(la => la.LoanOffer)
+            .Include(la => la.Payments) // Include payments
+            .ToListAsync();
     }
 
-    public async Task<IEnumerable<LoanApplication>> GetLoanApplicationsByLoanOfferIdAsync(int loanOfferId)
+    public async Task<IList<LoanApplication>> GetLoanApplicationsByLoanOfferIdAsync(int loanOfferId)
     {
         return await _context.LoanApplications
-                .Where(la => la.LoanOfferId == loanOfferId)
-                .Include(la => la.Borrower)
-                .ToListAsync();
+            .Where(la => la.LoanOfferId == loanOfferId)
+            .Include(la => la.Borrower)
+            .Include(la => la.Payments) // Include payments
+            .ToListAsync();
     }
 
     public async Task<LoanApplication> UpdateLoanApplicationStatusAsync(int id, int lenderId, UpdateLoanApplicationStatusDto updateLoanApplicationStatusDto)
@@ -132,11 +136,13 @@ public class LoanApplicationRepository : ILoanApplicationRepository
                 BorrowerId = loanApplication.BorrowerId,
                 LoanOfferId = loanOffer.Id,
                 PrincipalAmount = loanOffer.PrincipalAmount,
-                RemainingBalance = loanOffer.PrincipalAmount,
+                RemainingBalance = loanOffer.MonthlyRepayment * loanOffer.DurationInYears * 12,
                 InterestRate = loanOffer.InterestRate,
-                DurationInMonths = loanOffer.DurationInMonths,
+                DurationInYears = loanOffer.DurationInYears,
+                MonthlyRepayment = loanOffer.MonthlyRepayment,
+                TotalRepayment = loanOffer.TotalRepayment,
                 StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow.AddMonths(loanOffer.DurationInMonths),
+                EndDate = DateTime.UtcNow.AddMonths(loanOffer.DurationInYears *12),
                 Status = LoanStatus.Active
             };
 

@@ -10,7 +10,9 @@ public class Loan
     public decimal PrincipalAmount { get; set; }
     public decimal RemainingBalance { get; set; }
     public decimal InterestRate { get; set; }
-    public int DurationInMonths { get; set; }
+    public int DurationInYears { get; set; }
+    public decimal MonthlyRepayment {get;set;}
+    public decimal TotalRepayment {get;set;}
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public LoanStatus Status { get; set; }

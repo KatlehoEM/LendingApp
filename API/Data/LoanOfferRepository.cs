@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -21,7 +22,9 @@ public class LoanOfferRepository : ILoanOfferRepository
         {
             LenderId = lenderId,
             PrincipalAmount = loanOfferDto.PrincipalAmount,
-            DurationInMonths = loanOfferDto.DurationInMonths,
+            DurationInYears = loanOfferDto.DurationInYears,
+            MonthlyRepayment = loanOfferDto.MonthlyRepayment,
+            TotalRepayment = loanOfferDto.TotalRepayment,
             InterestRate = loanOfferDto.InterestRate,
             IsActive = loanOfferDto.IsActive
         };
@@ -46,12 +49,24 @@ public class LoanOfferRepository : ILoanOfferRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<LoanOffer>> GetActiveLoanOffersAsync()
+    public async Task<IEnumerable<LoanOffer>> GetActiveLoanOffersAsync(int borrowerId)
     {
-        return await _context.LoanOffers
-            .Where(lo => lo.IsActive)
+        var loanApplications = await _context.LoanApplications
+        .Where(la => la.BorrowerId == borrowerId)
+        .Select(la => la.LoanOfferId)
+        .ToListAsync();
+
+        var loanOffers = await _context.LoanOffers
             .Include(lo => lo.Lender)
+            .Where(lo => lo.IsActive)
             .ToListAsync();
+
+        foreach (var offer in loanOffers)
+        {
+            offer.HasApplied = loanApplications.Contains(offer.Id);
+        }
+
+        return loanOffers;
     }
 
     public async Task<LoanOffer> UpdateLoanOfferAsync(int id, int lenderId, UpdateLoanOfferDto updateLoanOfferDto)
@@ -66,8 +81,10 @@ public class LoanOfferRepository : ILoanOfferRepository
 
         if (updateLoanOfferDto.PrincipalAmount != 0m)
             loanOffer.PrincipalAmount = updateLoanOfferDto.PrincipalAmount;
-        if (updateLoanOfferDto.DurationInMonths != 0)
-            loanOffer.DurationInMonths = updateLoanOfferDto.DurationInMonths;
+        if (updateLoanOfferDto.DurationInYears != 0)
+            loanOffer.DurationInYears = updateLoanOfferDto.DurationInYears;
+         if (updateLoanOfferDto.MonthlyRepayment != 0)
+            loanOffer.MonthlyRepayment = updateLoanOfferDto.MonthlyRepayment;
         if (updateLoanOfferDto.InterestRate != 0m)
             loanOffer.InterestRate = updateLoanOfferDto.InterestRate;
         if (updateLoanOfferDto.IsActive)

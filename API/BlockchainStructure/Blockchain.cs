@@ -2,13 +2,16 @@
 
 public class Blockchain
 {
+
     public List<Block> Chain { get; set; }
-    public int Difficulty { get; set; } = 4;
+    public int Difficulty { get; set; } = 2;
     public List<Transaction> PendingTransactions { get; private set; }
     private DateTime LastMinedDay {get;set;}
+    private readonly ILogger<Blockchain> _blockchainlogger;
 
-    public Blockchain()
+    public Blockchain(ILogger<Blockchain> blockchainLogger)
     {
+        _blockchainlogger = blockchainLogger;
         Chain = new List<Block> { CreateGenesisBlock() };
         PendingTransactions = new List<Transaction>();
         LastMinedDay = DateTime.UtcNow.Date;
@@ -32,16 +35,18 @@ public class Blockchain
     public void AddBlock(Block block)
     {
         block.PreviousHash = GetLatestBlock().Hash;
-        block.Mine(Difficulty);
+        //_blockchainlogger.LogInformation($"\nMining block {block.Index}");
+        block.Mine(Difficulty, _blockchainlogger);
         Chain.Add(block);
+       // _blockchainlogger.LogInformation($"\nBlock {block.Index} added to the chain");
     }
 
     public bool MineNewBlock()
     {
-        return PendingTransactions.Count >= 2 || DateTime.UtcNow.Date > LastMinedDay;
+        return  PendingTransactions.Count > 0; //PendingTransactions.Count >= 2 || DateTime.UtcNow.Date > LastMinedDay;
     }
 
-     public bool IsValid()
+    public bool IsValid()
     {
         for (int i = 1; i < Chain.Count; i++)
         {
@@ -78,7 +83,7 @@ public class Blockchain
         {
             PendingTransactions.Remove(transaction);
         }
-        AddTransaction(new Transaction(null, minerAddress, 1)); // Mining reward
+        AddTransaction(new Transaction(minerAddress, 1m,0)); // Mining reward
 
         LastMinedDay = DateTime.UtcNow.Date;
     }
@@ -109,7 +114,4 @@ public class Blockchain
         }
         return true;
     }
-
-
-
 }

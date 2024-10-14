@@ -5,4 +5,63 @@
   .table th, .table td {
     vertical-align: middle;
   }
+
+.reputation-circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px; /* Adjust the size as needed */
+    height: 30px; /* Adjust the size as needed */
+    border-radius: 40%;
+    color: white; /* Text color */
+    margin-left: 20px;
+    padding:10px 20px;
+}
+
+.circle-red {
+    background-color: #db3647;
+}
+
+.circle-yellow {
+    background-color: #e3bf4c;
+}
+
+.circle-green {
+    background-color: #1c8455;
+}
+
+.credit-circle {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px; /* Adjust the size as needed */
+  height: 30px; /* Adjust the size as needed */
+  border-radius: 40%;
+  color: white; /* Text color */
+  margin-left: 20px;
+  padding:10px 20px;
+}
+
+/* Credit Score Circle Colors */
+.circle-poor {
+  background-color: #db3647;
+}
+
+.circle-fair {
+  background-color: #e3bf4c; /* Change color for better visibility */
+}
+
+.circle-good {
+  background-color: orange; /* Change to a lighter color */
+}
+
+.circle-very-good {
+  background-color: lightgreen; /* Light green for visibility */
+}
+
+.circle-excellent {
+  background-color:#1c8455; /* Keep green for excellent */
+}
+
+
   

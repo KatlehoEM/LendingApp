@@ -24,7 +24,10 @@ namespace API.Data.Migrations
                     WalletAddress = table.Column<string>(type: "TEXT", nullable: true),
                     CreditScore = table.Column<int>(type: "INTEGER", nullable: false),
                     IdNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    Address = table.Column<string>(type: "TEXT", nullable: true),
+                    StreetNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    StreetName = table.Column<string>(type: "TEXT", nullable: true),
+                    City = table.Column<string>(type: "TEXT", nullable: true),
+                    PostalCode = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
                     EmploymentStatus = table.Column<string>(type: "TEXT", nullable: true),
                     AnnualIncome = table.Column<decimal>(type: "TEXT", nullable: false),
@@ -46,8 +49,11 @@ namespace API.Data.Migrations
                     LenderId = table.Column<int>(type: "INTEGER", nullable: false),
                     PrincipalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
                     InterestRate = table.Column<decimal>(type: "TEXT", nullable: false),
-                    DurationInMonths = table.Column<int>(type: "INTEGER", nullable: false),
+                    DurationInYears = table.Column<int>(type: "INTEGER", nullable: false),
+                    MonthlyRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    HasApplied = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -76,6 +82,8 @@ namespace API.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     LoanOfferId = table.Column<int>(type: "INTEGER", nullable: false),
                     BorrowerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MonthlyRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     AcceptanceDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -109,7 +117,9 @@ namespace API.Data.Migrations
                     PrincipalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
                     RemainingBalance = table.Column<decimal>(type: "TEXT", nullable: false),
                     InterestRate = table.Column<decimal>(type: "TEXT", nullable: false),
-                    DurationInMonths = table.Column<int>(type: "INTEGER", nullable: false),
+                    DurationInYears = table.Column<int>(type: "INTEGER", nullable: false),
+                    MonthlyRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalRepayment = table.Column<decimal>(type: "TEXT", nullable: false),
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
@@ -180,12 +190,20 @@ namespace API.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     LoanId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LoanApplicationId = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Balance = table.Column<decimal>(type: "TEXT", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_LoanApplications_LoanApplicationId",
+                        column: x => x.LoanApplicationId,
+                        principalTable: "LoanApplications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Payments_Loans_LoanId",
                         column: x => x.LoanId,
@@ -223,6 +241,11 @@ namespace API.Data.Migrations
                 name: "IX_Loans_LoanOfferId",
                 table: "Loans",
                 column: "LoanOfferId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_LoanApplicationId",
+                table: "Payments",
+                column: "LoanApplicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_LoanId",

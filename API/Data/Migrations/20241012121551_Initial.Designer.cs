@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240917215029_Initial")]
+    [Migration("20241012121551_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -29,7 +29,7 @@ namespace API.Data.Migrations
                     b.Property<int>("BorrowerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DurationInMonths")
+                    b.Property<int>("DurationInYears")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("EndDate")
@@ -40,6 +40,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("LoanOfferId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("MonthlyRepayment")
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("PrincipalAmount")
                         .HasColumnType("TEXT");
@@ -52,6 +55,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalRepayment")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -80,8 +86,14 @@ namespace API.Data.Migrations
                     b.Property<int>("LoanOfferId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("MonthlyRepayment")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalRepayment")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -104,7 +116,10 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DurationInMonths")
+                    b.Property<int>("DurationInYears")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("HasApplied")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("InterestRate")
@@ -116,7 +131,13 @@ namespace API.Data.Migrations
                     b.Property<int>("LenderId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("MonthlyRepayment")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("PrincipalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalRepayment")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -143,6 +164,12 @@ namespace API.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LoanApplicationId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("LoanId")
                         .HasColumnType("INTEGER");
 
@@ -150,6 +177,8 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LoanApplicationId");
 
                     b.HasIndex("LoanId");
 
@@ -202,10 +231,10 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
+                    b.Property<decimal>("AnnualIncome")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("AnnualIncome")
+                    b.Property<string>("City")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -235,8 +264,17 @@ namespace API.Data.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Role")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("StreetName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StreetNumber")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -307,6 +345,12 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Payment", b =>
                 {
+                    b.HasOne("API.Entities.LoanApplication", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("LoanApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Entities.Loan", "Loan")
                         .WithMany("Payments")
                         .HasForeignKey("LoanId")
@@ -348,6 +392,11 @@ namespace API.Data.Migrations
                 });
 
             modelBuilder.Entity("API.Entities.Loan", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("API.Entities.LoanApplication", b =>
                 {
                     b.Navigation("Payments");
                 });

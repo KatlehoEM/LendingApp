@@ -46,7 +46,10 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<LoanOffer>>> GetActiveLoanOffers()
         {
-            var loanOffers = await _loanOfferRepo.GetActiveLoanOffersAsync();
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            int borrowerId = user.Id;
+            var loanOffers = await _loanOfferRepo.GetActiveLoanOffersAsync(borrowerId);
             return Ok(loanOffers);
         }
 

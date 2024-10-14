@@ -1,7 +1,10 @@
+using System.Security.Claims;
+using API.Data;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -9,10 +12,14 @@ namespace API.Controllers
     public class PaymentController : BaseApiController
     {
         private readonly IPaymentRepository _paymentRepo;
+        private readonly IBlockchainService _blockchainService;
+         private readonly DataContext _context;
 
-        public PaymentController(IPaymentRepository paymentRepo)
+        public PaymentController(IPaymentRepository paymentRepo, DataContext context, IBlockchainService blockchainService)
         {
             _paymentRepo = paymentRepo;
+            _blockchainService = blockchainService;
+            _context = context;
         }
 
         [HttpPost("make")]
@@ -23,10 +30,15 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
+            string username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == username);
+            var borrowerId = user.Id;
+
             var result = await _paymentRepo.ProcessPaymentAsync(request);
 
             if (result.Success)
             {
+                await _blockchainService.UpdateReputationScoreAsync(borrowerId);
                 return Ok(new { Message = "Payment processed successfully", PaymentId = result.PaymentId });
             }
             else

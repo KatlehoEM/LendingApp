@@ -13,21 +13,31 @@
   </div>
 
   <!-- Loan Offer List -->
-  <div class="loan-offer-list row">
+  <div *ngIf="loanOffers.length === 0" class="alert alert-warning text-center" role="alert">
+    There are no loan offers available at the moment.
+  </div>
+
+  <!-- Loan Offer List -->
+  <div *ngIf="loanOffers.length > 0" class="loan-offer-list row">
     <div *ngFor="let offer of loanOffers" class="loan-offer-item col-md-4 col-sm-6">
       <div class="card shadow-sm h-30" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Principal: {{ offer.principalAmount | currency }}</h5>
+          <h5 class="card-title">Principal: {{ offer.principalAmount | currency:'R':'symbol' }}</h5>
           <p class="mb-1">Interest Rate: {{ offer.interestRate }}%</p>
-          <p class="mb-1">Duration: {{ offer.durationInMonths }} months</p>
+          <p class="mb-1">Payment term: {{ offer.durationInYears }} Years</p>
+          <p class="mb-1">Monthly Repayments: {{ offer.monthlyRepayment | currency:'R':'symbol' }}</p>
+          <p class="mb-1">Total Repayment: {{ offer.totalRepayment | currency:'R':'symbol' }}</p>
           <p class="mb-1">Lender: {{ offer.lender.firstName }}</p>
-
 
           <!-- Conditional Buttons: Only show 'Apply' if the user is a borrower -->
           <div class="d-flex justify-content-between mt-3">
             <ng-container *ngIf="authService.isBorrower()">
-              <button class="btn btn-outline-success btn-sm" (click)="applyForLoan(offer)">
-                Apply
+              <button 
+                class="btn btn-sm" 
+                [ngClass]="offer.hasApplied ? 'btn-secondary' : 'btn-outline-success'" 
+                [disabled]="offer.hasApplied"
+                (click)="applyForLoan(offer)">
+                {{ offer.hasApplied ? 'Applied' : 'Apply' }}
               </button>
             </ng-container>
             <button *ngIf="showMyOffersOnly" class="btn btn-outline-primary btn-sm" (click)="updateLoanOffer(offer)">Edit</button>

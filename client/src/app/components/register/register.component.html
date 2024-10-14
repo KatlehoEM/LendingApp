@@ -97,21 +97,44 @@
   
       <div class="form-group full-width">
         <label for="address">Home Address:</label>
-        <input type="text" id="address" formControlName="address" required>
-          <div *ngIf="registrationForm.get('address')!.invalid && registrationForm.get('address')!.touched" class="error-message">
-            Please enter your home address.
+        <div class="form-row">
+          <div class="form-group half-width">
+            <input type="text" id="streetNumber" formControlName="streetNumber" placeholder="Street Number" required>
+            <div *ngIf="registrationForm.get('streetNumber')!.invalid && registrationForm.get('streetNumber')!.touched" class="error-message">
+              Please enter your street number.
+            </div>
           </div>
+          <div class="form-group half-width">
+            <input type="text" id="streetName" formControlName="streetName" placeholder="Street Name" required>
+            <div *ngIf="registrationForm.get('streetName')!.invalid && registrationForm.get('streetName')!.touched" class="error-message">
+              Please enter your street name.
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group half-width">
+            <input type="text" id="city" formControlName="city" placeholder="City" required>
+            <div *ngIf="registrationForm.get('city')!.invalid && registrationForm.get('city')!.touched" class="error-message">
+              Please enter your city.
+            </div>
+          </div>
+          <div class="form-group half-width">
+            <input type="text" id="postalCode" formControlName="postalCode" placeholder="Postal Code" required>
+            <div *ngIf="registrationForm.get('postalCode')!.invalid && registrationForm.get('postalCode')!.touched" class="error-message">
+              Please enter your postal code.
+            </div>
+          </div>
+        </div>
       </div>
   
       <div class="form-row">
         <div class="form-group half-width">
           <label for="phoneNumber">Phone Number:</label>
-          <input type="tel" id="phoneNumber" formControlName="phoneNumber" required>
-  
-            <div *ngIf="registrationForm.get('phoneNumber')!.invalid && registrationForm.get('phoneNumber')!.touched" class="error-message">
-              Please enter a valid phone number.
-            </div>
-          
+          <input type="tel" id="phoneNumber" formControlName="phoneNumber" required
+                 placeholder="e.g., 012 345 6789" (input)="formatPhoneNumber()">
+          <div *ngIf="registrationForm.get('phoneNumber')!.invalid && registrationForm.get('phoneNumber')!.touched" class="error-message">
+            Please enter a valid phone number.
+          </div>
         </div>
   
         <div class="form-group half-width">
@@ -133,21 +156,17 @@
   
     <div class="form-row">
       <div class="form-group half-width">
-        <label for="annualIncome">Annual Income:</label>
-        <input type="number" id="annualIncome" formControlName="annualIncome" required>
-  
-          <div *ngIf="registrationForm.get('annualIncome')!.invalid && registrationForm.get('annualIncome')!.touched" class="error-message">
-            Please enter your annual income.
-          </div>
-        
-      </div>
-  
-      <div class="form-group half-width">
-        <label for="creditScore">Credit Score:</label>
-        <input type="number" id="creditScore" formControlName="creditScore" [value]="randomCreditScore" required>
-      
-        <div *ngIf="registrationForm.get('creditScore')!.invalid && registrationForm.get('creditScore')!.touched" class="error-message">
-          Credit score must be between 300 and 850.
+        <label for="annualIncome">Annual Income (R):</label>
+        <input 
+          type="text" 
+          id="annualIncome" 
+          formControlName="annualIncome" 
+          [value]="formattedIncome" 
+          (input)="formatIncome($event)" 
+          placeholder="0.00" 
+          required>
+        <div *ngIf="registrationForm.get('annualIncome')!.invalid && registrationForm.get('annualIncome')!.touched" class="error-message">
+          Please enter your annual income in Rands.
         </div>
       </div>
     </div>

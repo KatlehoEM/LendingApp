@@ -12,7 +12,39 @@
     font-size: 0.9em;
   }
 
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+  }
+
   input[type="number"]:focus {
     border-color: #4CAF50;
     outline: none;
   }
+
+  input[type="text"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+
+  /* Styling for the range input */
+
+
+/* Hover effect */
+input[type="range"]:hover {
+  opacity: 1;
+}
+
+
+
+input[type="range"]::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #000; /* Bootstrap primary color */
+  cursor: pointer;
+}

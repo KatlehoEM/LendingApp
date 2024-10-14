@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
    }
 
     public async Task<User> CreateUserAsync(string firstName, string lastName, string email, Role role, string password,string confirmPassword, DateTime dateOfBirth,
-      string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore, string walletAddress)
+      string idNumber, string streetNumber, string streetName, string city, string postalCode, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore, string walletAddress)
     {
         var user = new User
         {
@@ -25,9 +25,12 @@ public class UserRepository : IUserRepository
             Email = email,
             PasswordHash = HashPassword(password),
             CreditScore = creditScore,
-            WalletAddress = walletAddress,
+            WalletAddress = Guid.NewGuid().ToString(),
             IdNumber = idNumber,
-            Address = address,
+            StreetNumber = streetName,
+            StreetName = streetName,
+            City = city,
+            PostalCode = postalCode,
             PhoneNumber = phoneNumber,
             EmploymentStatus = employmentStatus,
             AnnualIncome = annualIncome,
@@ -42,9 +45,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User> GetUserByUsernameAsync(string firstName)
+    public async Task<User> GetUserByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.FirstName == firstName);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User> GetUserByIdAsync(int id)
@@ -52,9 +55,9 @@ public class UserRepository : IUserRepository
         return await _context.Users.FindAsync(id);
     }
 
-    public async Task<bool> ValidateUserAsync(string fullname, string password)
+    public async Task<bool> ValidateUserAsync(string email, string password)
     {
-        var user = await GetUserByUsernameAsync(fullname);
+        var user = await GetUserByEmailAsync(email);
         if (user == null)
             return false;
 

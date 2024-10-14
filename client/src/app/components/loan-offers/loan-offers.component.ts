@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoanOffer } from 'src/app/_models/loan-offer';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -17,7 +18,7 @@ export class LoanOffersComponent implements OnInit {
   showMyOffersOnly: boolean = false;
 
 
-  constructor(private loanOfferService: LoanOfferService, private toastr: ToastrService,
+  constructor(private loanOfferService: LoanOfferService, private router: Router, private toastr: ToastrService,
      public authService: AuthService, private loanApplicationService: LoanApplicationService) { }
 
   ngOnInit(): void {
@@ -68,8 +69,10 @@ export class LoanOffersComponent implements OnInit {
   applyForLoan(offer: LoanOffer): void {
     this.loanApplicationService.applyForLoan(offer.id).subscribe({
       next: (application) => {
+
         console.log('Successfully applied for loan', application);
         this.toastr.success('Successfully applied for loan', 'Success');
+        this.router.navigateByUrl('/borrower-dashboard');
       },
       error: (error) => {
         console.error('Error applying for loan', error);

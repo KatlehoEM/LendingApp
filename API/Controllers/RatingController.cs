@@ -14,10 +14,12 @@ namespace API.Controllers
     {
         private readonly IRatingRepository _ratingRepo;
         private readonly DataContext _context;
+        private readonly IBlockchainService _blockchainService;
 
-        public RatingController(IRatingRepository ratingRepository, DataContext context)
+        public RatingController(IRatingRepository ratingRepository, DataContext context, IBlockchainService blockchainService)
         {
             _ratingRepo = ratingRepository;
+            _blockchainService = blockchainService;
             _context = context;
         }
 
@@ -31,6 +33,7 @@ namespace API.Controllers
             try
             {
                 var borrowerRating = await _ratingRepo.CreateBorrowerRatingAsync(lenderId, createRatingDto);
+                await _blockchainService.UpdateReputationScoreAsync(borrowerRating.BorrowerId);
                 return CreatedAtAction(nameof(GetBorrowerRating), new { id = borrowerRating.Id }, borrowerRating);
             }
             catch (ApplicationException ex)
@@ -74,6 +77,7 @@ namespace API.Controllers
             try
             {
                 var updatedBorrowerRating = await _ratingRepo.UpdateBorrowerRatingAsync(id, lenderId, updateRatingDto);
+                await _blockchainService.UpdateReputationScoreAsync(updatedBorrowerRating.BorrowerId);
                 return Ok(updatedBorrowerRating);
             }
             catch (ApplicationException ex)

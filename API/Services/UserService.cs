@@ -16,7 +16,7 @@ public class UserService : IUserService
     }
 
     public async Task<User> RegisterUserAsync(string firstName, string lastName, string email, Role role, string password,string confirmPassword, DateTime dateOfBirth,
-      string idNumber, string address, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore)
+      string idNumber, string streetNumber, string streetName, string city, string postalCode, string phoneNumber, string employmentStatus, decimal annualIncome, int creditScore)
     {
          // Add validation logic here (e.g., password strength, email format, credit score range)
         if (creditScore < 300 || creditScore > 850)
@@ -25,21 +25,21 @@ public class UserService : IUserService
         }
 
         return await _userRepository.CreateUserAsync(firstName, lastName, email, role, password, confirmPassword, dateOfBirth,
-      idNumber, address, phoneNumber, employmentStatus,  annualIncome,creditScore, "");
+      idNumber, streetNumber, streetName, city, postalCode, phoneNumber, employmentStatus,  annualIncome,creditScore, "");
     
     }
 
-    public async Task<(bool IsValid, string Token, Role role)> LoginAsync(string username, string password)
+    public async Task<(bool IsValid, string Token, Role role, string firstName)> LoginAsync(string email, string password)
     {
-        var isValid = await _userRepository.ValidateUserAsync(username, password);
+        var isValid = await _userRepository.ValidateUserAsync(email, password);
         if (!isValid)
         {
-            return (false, null, 0);
+            return (false, null, 0,"");
         }
 
-        var user = await _userRepository.GetUserByUsernameAsync(username);
+        var user = await _userRepository.GetUserByEmailAsync(email);
         var token = _jwtService.GenerateToken(user);
-        return (true, token, user.Role);
+        return (true, token, user.Role, user.FirstName);
     }
 
     public async Task<User> GetUserByIdAsync(int id)

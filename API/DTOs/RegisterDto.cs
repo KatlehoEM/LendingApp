@@ -14,7 +14,10 @@ public class RegisterDto
     public Role Role { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string IdNumber { get; set; }
-    public string Address { get; set; }
+    public string StreetNumber { get; set; } 
+    public string StreetName { get; set; } 
+    public string City { get; set; } 
+    public string PostalCode { get; set; }
     public string PhoneNumber { get; set; }
     public string EmploymentStatus { get; set; }
     public decimal AnnualIncome { get; set; }

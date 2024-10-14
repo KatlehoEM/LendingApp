@@ -17,6 +17,21 @@ public class LoanRepository : ILoanRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Payment>> GetPaymentsForLoanOfferAsync(int loanOfferId)
+{
+    var loan = await _context.Loans
+                             .Include(l => l.Payments)
+                             .FirstOrDefaultAsync(l => l.LoanOfferId == loanOfferId);
+
+    if (loan == null)
+    {
+        throw new Exception("No loan found for this loan offer");
+    }
+
+    return loan.Payments;
+}
+
+
 
     public async Task<LoanApplication> AcceptLoanApplicationAsync(int loanApplicationId, int lenderId)
     {

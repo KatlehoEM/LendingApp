@@ -2,17 +2,17 @@
 
 public class Transaction
 {
-    public string FromAddress { get; set; }
-    public string ToAddress { get; set; }
-    public decimal Amount { get; set; }
+    public string BorrowerAddress { get; set; }
+     public decimal ReputationScore { get; set; }
+    public int CreditScore { get; set; }
     public DateTime TimeStamp { get; set; }
 
-    public Transaction(string fromAddress, string toAddress, decimal amount)
+     public Transaction(string borrowerAddress, decimal reputationScore, int creditScore)
     {
-        FromAddress = fromAddress;
-        ToAddress = toAddress;
-        Amount = amount;
-        TimeStamp = DateTime.UtcNow;
+        BorrowerAddress = borrowerAddress;
+        ReputationScore = reputationScore;
+        CreditScore = creditScore;
+        TimeStamp = DateTime.Now;
     }
     public Transaction(){}
 }
